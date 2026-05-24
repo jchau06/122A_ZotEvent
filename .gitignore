@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database/Local files
+*.db
+*.sqlite
+*.sqlite3
+local_config.py
+
+# Don't commit test data or sample data if it contains sensitive info
+# (optional - only if your sample_data has real credentials)
+# sample_data/
+# test_data/
