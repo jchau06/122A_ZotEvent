@@ -1,6 +1,6 @@
 import sys
 from import_data import import_func
-
+from user_operations import *
 
 # entry point - parses through CLI arguments and routes to functions
 # Expected format: python3 project.py <function_name> [param1] [param2] ...
@@ -21,7 +21,10 @@ def main():
         if func_name == "import":
             # python3 project.py import [folderName]
             result = import_func(args[0])
-        
+
+        elif func_name == "insertAdmin":
+            result = insertAdmin(args[0], args[1], args[2], args[3], args[4], args[5]);
+            
         # branches for other functions need to be added. 
         else:
             print(f"Error: Unknown function '{func_name}'")
