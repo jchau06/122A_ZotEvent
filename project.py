@@ -1,6 +1,7 @@
 import sys
 from import_data import import_func
 from user_operations import *
+from event_operations import *
 
 # entry point - parses through CLI arguments and routes to functions
 # Expected format: python3 project.py <function_name> [param1] [param2] ...
@@ -23,7 +24,12 @@ def main():
             result = import_func(args[0])
 
         elif func_name == "insertAdmin":
-            result = insertAdmin(args[0], args[1], args[2], args[3], args[4], args[5]);
+            #python3 project.py insertAdmin [uid] [email] [username] [joined] [firstname] [lastname]
+            result = insertAdmin(args[0], args[1], args[2], args[3], args[4], args[5])
+
+        elif func_name == "deleteOrganizer":
+            #python3 project.py deleteOrganizer [uid:int]
+            result = deleteOrganizer(int(args[0]))
             
         # branches for other functions need to be added. 
         else:

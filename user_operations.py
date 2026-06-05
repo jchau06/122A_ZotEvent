@@ -2,7 +2,6 @@ from database import get_connection
 
 def insertAdmin(uid, email, username, joined, firstname, lastname):
     """Insert a new user and administrator into the related tables."""
-    # TODO: Implement in user_operations.py
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -25,5 +24,15 @@ def insertAdmin(uid, email, username, joined, firstname, lastname):
 
 def deleteOrganizer(uid):
     """Delete an organizer from the database."""
-    # TODO: Implement in user_operations.py
-    return True
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("DELETE FROM Organizer WHERE uid = %s", (uid,))
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+        return True
+    except Exception:
+        return False
