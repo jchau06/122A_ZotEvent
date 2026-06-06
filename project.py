@@ -2,11 +2,13 @@ import sys
 from import_data import import_func
 from user_operations import *
 from event_operations import *
+from slot_operations import *
+from database import setup_schema
 
 # entry point - parses through CLI arguments and routes to functions
 # Expected format: python3 project.py <function_name> [param1] [param2] ...
 def main():
-    
+    setup_schema()
     # check if function name was provided
     if len(sys.argv) < 2:
         print("Error: No function name provided")
@@ -30,7 +32,11 @@ def main():
         elif func_name == "deleteOrganizer":
             #python3 project.py deleteOrganizer [uid:int]
             result = deleteOrganizer(int(args[0]))
-            
+
+        elif func_name == "reserveSlot":
+            #python3 project.py reserveSlot [eid:int] [snum:int] [uid:int]
+            result = reserveSlot(int(args[0]), int(args[1]), int(args[2]))
+
         # branches for other functions need to be added. 
         else:
             print(f"Error: Unknown function '{func_name}'")
