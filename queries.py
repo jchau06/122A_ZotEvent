@@ -18,16 +18,38 @@ def availableEvents(date):
             print(f"{eid},{title},{type},{datetime},{availiable}")
         cursor.close()
         conn.close()
+        #TODO: subject to removal bc idk if we need to return the boolean
         return True
     except Exception as e:
         print(f"Error: {e}")
+        #TODO: subject to removal bc idk if we need to return the boolean
         return False
 
 
 def popularEventTypes(N):
     """For each event type, compute the total number of reserved slots."""
     # TODO: Implement in queries.py
-    return []
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT e.type, COUNT(*) AS reservedCount "
+                       "FROM Event e "
+                       "INNER JOIN Slot s on e.eid = s.eid "
+                       "WHERE s.is_reserved = TRUE "
+                       "GROUP BY e.type "
+                       "HAVING COUNT(*) >= %s "
+                       "ORDER BY reservedCount DESC, e.type ASC",
+                       (int(N),))
+        for type, reservedCount in cursor.fetchall():
+            print(f"{type},{reservedCount}")
+        cursor.close()
+        conn.close()
+        #TODO: subject to removal bc idk if we need to return the boolean
+        return True
+    except Exception as e:
+        print(f"Error: {e}")
+        #TODO: subject to removal bc idk if we need to return the boolean
+        return False
 
 
 def participantSchedule(uid):
