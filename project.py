@@ -33,6 +33,10 @@ def main():
             #python3 project.py deleteOrganizer [uid:int]
             result = deleteOrganizer(int(args[0]))
 
+        elif func_name == "reserveSlot":
+            #python3 project.py reserveSlot [eid] [snum] [uid]
+            result = reserveSlot(int(args[0]), int(args[1]), int(args[2]))
+            
         elif func_name == "cancelReservation":
             #python3 project.py cancelReservation [eid] [snum] [uid]
             result = cancelReservation(int(args[0]), int(args[1]), int(args[2]))
