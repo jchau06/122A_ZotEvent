@@ -29,14 +29,10 @@ def deleteOrganizer(uid):
         cursor = conn.cursor()
 
         cursor.execute("DELETE FROM Organizer WHERE uid = %s", (uid,))
-        if cursor.rowcount == 0:
-            cursor.close()
-            conn.close()
-            return False
         conn.commit()
-
+        success = cursor.rowcount > 0
         cursor.close()
         conn.close()
-        return True
+        return success
     except Exception:
         return False

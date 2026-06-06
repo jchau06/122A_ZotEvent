@@ -1,9 +1,9 @@
 import sys
 from import_data import import_func
-from user_operations import *
-from event_operations import *
-from slot_operations import *
-from database import setup_schema
+from user_operations import insertAdmin, deleteOrganizer
+from event_operations import addVenue, updateEvent
+from slot_operations import cancelReservation, reserveSlot
+from queries import availableEvents, popularEventTypes, participantSchedule, organizerStats, venueEvents
 
 # entry point - parses through CLI arguments and routes to functions
 # Expected format: python3 project.py <function_name> [param1] [param2] ...
@@ -27,16 +27,21 @@ def main():
 
         elif func_name == "insertAdmin":
             #python3 project.py insertAdmin [uid] [email] [username] [joined] [firstname] [lastname]
-            result = insertAdmin(args[0], args[1], args[2], args[3], args[4], args[5])
+            result = insertAdmin(int(args[0]), args[1], args[2], args[3], args[4], args[5])
 
         elif func_name == "deleteOrganizer":
             #python3 project.py deleteOrganizer [uid:int]
             result = deleteOrganizer(int(args[0]))
 
-        elif func_name == "reserveSlot":
-            #python3 project.py reserveSlot [eid:int] [snum:int] [uid:int]
-            result = reserveSlot(int(args[0]), int(args[1]), int(args[2]))
+        elif func_name == "cancelReservation":
+            #python3 project.py cancelReservation [eid] [snum] [uid]
+            result = cancelReservation(int(args[0]), int(args[1]), int(args[2]))
 
+        elif func_name == "addVenue":
+            result = addVenue(int(args[0]), int(args[1]), args[2].lower() == 'true')
+        
+        elif func_name == "updateEvent":
+            result = updateEvent(int(args[0]), args[1], args[2])
         # branches for other functions need to be added. 
         else:
             print(f"Error: Unknown function '{func_name}'")
