@@ -7,4 +7,5 @@
 - pip3 install mysql-connector-python
 
 ## 3. Run Setup and Test Connection
+- python3 -c "from database import setup_schema; setup_schema()"
 - python3 project.py import sample_data
