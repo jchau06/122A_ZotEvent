@@ -1,8 +1,27 @@
+from database import get_connection
 
 def availableEvents(date):
     """List all future events that still have at least one unreserved slot."""
     # TODO: Implement in queries.py
-    return []
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT e.eid, e.title, e.type, e.datetime, COUNT(*) AS avaliableSlots "
+                       "FROM Event e "
+                       "INNER JOIN Slot s on e.eid = s.eid "
+                       "WHERE s.is_reserved = FALSE "
+                       "AND e.datetime > %s "
+                       "GROUP BY e.eid "
+                       "ORDER BY e.datetime ASC, e.eid ASC ",
+                       (date,))
+        for eid, title, type, datetime, availiable in cursor.fetchall():
+            print(f"{eid},{title},{type},{datetime},{availiable}")
+        cursor.close()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
 
 
 def popularEventTypes(N):

@@ -8,7 +8,6 @@ from queries import availableEvents, popularEventTypes, participantSchedule, org
 # entry point - parses through CLI arguments and routes to functions
 # Expected format: python3 project.py <function_name> [param1] [param2] ...
 def main():
-    setup_schema()
     # check if function name was provided
     if len(sys.argv) < 2:
         print("Error: No function name provided")
@@ -34,9 +33,9 @@ def main():
             result = deleteOrganizer(int(args[0]))
 
         elif func_name == "reserveSlot":
-            #python3 project.py reserveSlot [eid] [snum] [uid]
+            #python3 project.py reserveSlot [eid:int] [snum:int] [uid:int]
             result = reserveSlot(int(args[0]), int(args[1]), int(args[2]))
-            
+
         elif func_name == "cancelReservation":
             #python3 project.py cancelReservation [eid] [snum] [uid]
             result = cancelReservation(int(args[0]), int(args[1]), int(args[2]))
@@ -46,6 +45,15 @@ def main():
         
         elif func_name == "updateEvent":
             result = updateEvent(int(args[0]), args[1], args[2])
+        
+        elif func_name == "availableEvents":
+            #python3 project.py availableEvents [date:date]
+            result = availableEvents(args[0])
+        
+        elif func_name == "popularEventTypes":
+            #python3 project.py popularEventTypes [N:int]
+            result = popularEventTypes(int(args[0]))
+
         # branches for other functions need to be added. 
         else:
             print(f"Error: Unknown function '{func_name}'")
