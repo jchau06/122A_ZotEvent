@@ -5,9 +5,9 @@ def get_connection():
     # returns a fresh MySQL connection whenever called.
     return mysql.connector.connect(
         host="localhost",
-        user="root",
+        user="test",
         database="cs122a",
-        password="Alex0421"
+        password="password"
     )
 
 
@@ -15,8 +15,8 @@ def setup_schema():
     # recreates the database schema from scratch.
     conn = mysql.connector.connect(
         host="localhost",
-        user="root",
-        password = "Alex0421"
+        user="test",
+        password="password"
     )
     cursor = conn.cursor()
 

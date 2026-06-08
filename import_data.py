@@ -1,14 +1,133 @@
 import csv
 import os
+
+import mysql
 from database import get_connection
 
 
 def import_func(folder_name):
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="test",
+        password="password"
+    )
+    cursor = conn.cursor()
+    cursor.execute("CREATE DATABASE IF NOT EXISTS cs122a")
+    cursor.close()
+    conn.close()
+    
+    # Now connect to the database
     conn = get_connection()
     cursor = conn.cursor()
 
+
     # Delete in reverse order of foreign key dependencies
     try:
+
+        create_statements = [
+            # User and Organizer/Participant/Administrator
+            """CREATE TABLE IF NOT EXISTS User (
+                uid INT,
+                email VARCHAR(255) NOT NULL,
+                username VARCHAR(255) NOT NULL,
+                joined DATE NOT NULL,
+                PRIMARY KEY (uid)
+            )""",
+            
+            """CREATE TABLE IF NOT EXISTS Organizer (
+                uid INT,
+                department VARCHAR(255) NOT NULL,
+                experience INT NOT NULL,
+                PRIMARY KEY (uid),
+                FOREIGN KEY (uid) REFERENCES User(uid) ON DELETE CASCADE
+            )""",
+            
+            """CREATE TABLE IF NOT EXISTS Participant (
+                uid INT,
+                type VARCHAR(255),
+                PRIMARY KEY (uid),
+                FOREIGN KEY (uid) REFERENCES User(uid) ON DELETE CASCADE
+            )""",
+            
+            """CREATE TABLE IF NOT EXISTS Administrator (
+                uid INT,
+                firstname VARCHAR(255) NOT NULL,
+                lastname VARCHAR(255) NOT NULL,
+                PRIMARY KEY (uid),
+                FOREIGN KEY (uid) REFERENCES User(uid) ON DELETE CASCADE
+            )""",
+            
+            # Event and Slot
+            """CREATE TABLE IF NOT EXISTS Event (
+                eid INT,
+                creator_uid INT NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                type VARCHAR(255) NOT NULL,
+                datetime DATETIME NOT NULL,
+                PRIMARY KEY (eid),
+                FOREIGN KEY (creator_uid) REFERENCES Organizer(uid) ON DELETE CASCADE
+            )""",
+            
+            """CREATE TABLE IF NOT EXISTS Slot (
+                eid INT,
+                snum INT NOT NULL,
+                is_reserved BOOLEAN NOT NULL,
+                uid INT,
+                PRIMARY KEY (eid, snum),
+                FOREIGN KEY (eid) REFERENCES Event(eid) ON DELETE CASCADE,
+                FOREIGN KEY (uid) REFERENCES Participant(uid) ON DELETE SET NULL
+            )""",
+            
+            # Venue and OnCampus/OffCampus
+            """CREATE TABLE IF NOT EXISTS Venue (
+                vid INT,
+                street VARCHAR(255) NOT NULL,
+                city VARCHAR(255) NOT NULL,
+                state VARCHAR(255) NOT NULL,
+                zip VARCHAR(10) NOT NULL,
+                PRIMARY KEY (vid)
+            )""",
+            
+            """CREATE TABLE IF NOT EXISTS OnCampus (
+                vid INT,
+                code VARCHAR(255) NOT NULL,
+                PRIMARY KEY (vid),
+                FOREIGN KEY (vid) REFERENCES Venue(vid) ON DELETE CASCADE
+            )""",
+            
+            """CREATE TABLE IF NOT EXISTS OffCampus (
+                vid INT,
+                distance INT NOT NULL,
+                PRIMARY KEY (vid),
+                FOREIGN KEY (vid) REFERENCES Venue(vid) ON DELETE CASCADE
+            )""",
+            
+            # Relationships
+            """CREATE TABLE IF NOT EXISTS Hosting (
+                eid INT NOT NULL,
+                vid INT NOT NULL,
+                is_primary BOOLEAN NOT NULL,
+                PRIMARY KEY (eid, vid),
+                FOREIGN KEY (eid) REFERENCES Event(eid) ON DELETE CASCADE,
+                FOREIGN KEY (vid) REFERENCES Venue(vid) ON DELETE CASCADE
+            )""",
+            
+            """CREATE TABLE IF NOT EXISTS Approval (
+                uid INT NOT NULL,
+                vid INT NOT NULL,
+                valid_from DATE NOT NULL,
+                valid_until DATE NOT NULL,
+                PRIMARY KEY (uid, vid),
+                FOREIGN KEY (uid) REFERENCES Administrator(uid) ON DELETE CASCADE,
+                FOREIGN KEY (vid) REFERENCES OffCampus(vid) ON DELETE CASCADE
+            )"""
+        ]
+        
+        for statement in create_statements:
+            cursor.execute(statement)
+        
+        conn.commit()
+
         delete_statements = [
             "DELETE FROM Approval",
             "DELETE FROM Hosting",
