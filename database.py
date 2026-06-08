@@ -6,7 +6,8 @@ def get_connection():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        database="cs122a"
+        database="cs122a",
+        password="Alex0421"
     )
 
 
@@ -15,7 +16,7 @@ def setup_schema():
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
-        database="cs122a"
+        password = "Alex0421"
     )
     cursor = conn.cursor()
 
