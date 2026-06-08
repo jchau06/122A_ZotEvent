@@ -54,6 +54,18 @@ def main():
             #python3 project.py popularEventTypes [N:int]
             result = popularEventTypes(int(args[0]))
 
+        elif func_name == "venueEvents":
+            # python3 project.py venueEvents [vid:int]
+            result = venueEvents(int(args[0]))
+            
+        elif func_name == "organizerStats":
+            # python3 project.py organizerStats [N:int]
+            result = organizerStats(int(args[0]))
+
+        elif func_name == "participantSchedule":
+            # python3 project.py participantSchedule [uid:int]
+            result = participantSchedule(int(args[0]))
+
         # branches for other functions need to be added. 
         else:
             print(f"Error: Unknown function '{func_name}'")
