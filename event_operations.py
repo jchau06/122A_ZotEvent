@@ -32,7 +32,6 @@ def addVenue(eid, vid, is_primary):
 
 def updateEvent(eid, title, datetime):
     """Update the title and the datetime of an event."""
-    # TODO: Implement in event_operations.py
     try:
         conn = get_connection()
         cursor = conn.cursor()
@@ -40,6 +39,8 @@ def updateEvent(eid, title, datetime):
         cursor.execute(
                 "UPDATE Event SET title = %s, datetime = %s WHERE eid = %s",
                 (title, datetime, eid))
+        if cursor.rowcount == 0:
+            return False
         conn.commit()
         return True
     except Exception:
