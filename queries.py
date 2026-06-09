@@ -14,16 +14,15 @@ def availableEvents(date):
                        "GROUP BY e.eid "
                        "ORDER BY e.datetime ASC, e.eid ASC ",
                        (date,))
-        for eid, title, type, datetime, availiable in cursor.fetchall():
-            print(f"{eid},{title},{type},{datetime},{availiable}")
+        
+        rows = cursor.fetchall()
         cursor.close()
         conn.close()
         #TODO: subject to removal bc idk if we need to return the boolean
-        return True
+        return rows
     except Exception as e:
-        print(f"Error: {e}")
         #TODO: subject to removal bc idk if we need to return the boolean
-        return False
+        return []
 
 
 def popularEventTypes(N):
@@ -40,16 +39,15 @@ def popularEventTypes(N):
                        "HAVING COUNT(*) >= %s "
                        "ORDER BY reservedCount DESC, e.type ASC",
                        (int(N),))
-        for type, reservedCount in cursor.fetchall():
-            print(f"{type},{reservedCount}")
+        
+        rows = cursor.fetchall()
         cursor.close()
         conn.close()
         #TODO: subject to removal bc idk if we need to return the boolean
-        return True
+        return rows
     except Exception as e:
-        print(f"Error: {e}")
         #TODO: subject to removal bc idk if we need to return the boolean
-        return False
+        return []
 
 
 def participantSchedule(uid):
