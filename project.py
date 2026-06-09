@@ -84,7 +84,7 @@ def main():
             # result should be a list of tuples
             for row in result:
                 # Convert all values to strings and join with commas
-                print(",".join(str(value) for value in row))
+                print(",".join("NULL" if value is None else str(value) for value in row))
     
     except IndexError:
         print(f"Error: Missing required arguments for function '{func_name}'")
